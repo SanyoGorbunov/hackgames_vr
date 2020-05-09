@@ -139,7 +139,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b8e657194476ec47afd4458fcf56463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mirror: {fileID: 0}
+  mirror: {fileID: 36809504}
+--- !u!114 &36809504 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6679767147292968840, guid: ced4eccd21208594bb940bec56560c55,
+    type: 3}
+  m_PrefabInstance: {fileID: 1055898651}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 337e321dff721914f888f8beae56d7ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &383932052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -614,6 +626,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6679767147292968840, guid: ced4eccd21208594bb940bec56560c55,
+        type: 3}
+      propertyPath: nextSceneName
+      value: LevelOneScene
+      objectReference: {fileID: 0}
     - target: {fileID: 6679767147776917419, guid: ced4eccd21208594bb940bec56560c55,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -652,6 +652,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6679767147292968840, guid: ced4eccd21208594bb940bec56560c55,
+        type: 3}
+      propertyPath: nextSceneName
+      value: LevelThreeScene
+      objectReference: {fileID: 0}
     - target: {fileID: 6679767147776917419, guid: ced4eccd21208594bb940bec56560c55,
         type: 3}
       propertyPath: m_LocalPosition.x
