@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class MirrorController : MonoBehaviour
 {
+    private const float DelayBeforeNextScene = 5.0f;
+
     public GameObject[] missingPieces;
     public Material missingMaterial;
     public Material correctMaterial;
@@ -33,7 +35,12 @@ public class MirrorController : MonoBehaviour
 
         if (missingIndex == missingPieces.Length)
         {
-            SceneManager.LoadScene(nextSceneName);
+            Invoke("LoadNextScene", DelayBeforeNextScene);
         }
+    }
+
+    public void LoadNextScene()
+    {
+        SceneManager.LoadScene(nextSceneName);
     }
 }
