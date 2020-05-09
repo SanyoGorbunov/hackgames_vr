@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GlassPieceController : MonoBehaviour
 {
@@ -14,6 +15,10 @@ public class GlassPieceController : MonoBehaviour
     bool canInteract = true;
     bool beignInspected = false;
     private Material glassPieceMaterial;
+
+    public bool isWinning;
+    public UnityAction onInspection;
+    public UnityAction onUninspection;
 
     // Start is called before the first frame update
     void Start()
@@ -89,16 +94,34 @@ public class GlassPieceController : MonoBehaviour
         Vector3 pos = PlayerCamera.position + PlayerTransform.forward * offset;
         Quaternion finalRot = Quaternion.identity;
         StartCoroutine(MoveToPosition(pos, finalRot, 0.4f,true));
+
+        if (onInspection != null)
+        {
+            onInspection.Invoke();
+        }
     }
 
     public void UninspectPiece()
     {
         StartCoroutine(MoveToPosition(startPos, startRot, 0.4f, false));
+
+        if (onUninspection != null)
+        {
+            onUninspection.Invoke();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void RenderWinning()
+    {
+        if (isWinning)
+        {
+            glassPieceMaterial.SetColor("_Color", Color.red);
+        }
     }
 }

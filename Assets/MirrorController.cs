@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class MirrorController : MonoBehaviour
@@ -26,6 +27,23 @@ public class MirrorController : MonoBehaviour
         }
 
         missingIndex = 0;
+    }
+
+    public void RegisterEventTrigger(GlassPiecesController glassPiecesController)
+    {
+        EventTrigger.Entry entry = new EventTrigger.Entry();
+        entry.eventID = EventTriggerType.PointerClick;
+        entry.callback.AddListener((eventData) => {
+            if (glassPiecesController.IsCurrentPieceWinning())
+            {
+                FillMissingPiece();
+            }
+        });
+
+        foreach (Transform piece in transform)
+        {
+            piece.gameObject.GetComponent<EventTrigger>().triggers.Add(entry);
+        }
     }
 
     public void FillMissingPiece()
