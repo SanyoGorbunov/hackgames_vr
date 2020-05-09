@@ -1,7 +1,7 @@
 ﻿Shader "Unlit/NewUnlitShader"
 {
 	Properties{
-		_IsActive("Active", Range(0,1)) = 0.5
+		_IsActive("Active", Float) = 0.5
 	   _Cube("World Map", Cube) = "" {}
 		_Color("Inactive Color", Color) = (1,1,1,1)
 	}
@@ -48,7 +48,7 @@
 			  {
 				 float4 cube = texCUBE(_Cube, input.viewDir);
 
-				 float4 result = cube* (1- _IsActive) + _Color * _IsActive;
+				 float4 result = cube*_IsActive + _Color * (1 - _IsActive);
 				 //float3 reflecteмdDir =
 				 //	reflect(input.viewDir, normalize(input.normalDir));
 				 return result;

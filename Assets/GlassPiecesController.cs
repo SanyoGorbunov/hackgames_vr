@@ -13,7 +13,7 @@ public class GlassPiecesController : MonoBehaviour
         {
             EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = EventTriggerType.PointerClick;
-            entry.callback.AddListener((eventData) => { mirror.FillMissingPiece(); });
+            entry.callback.AddListener((eventData) => { glassPiece.gameObject.GetComponent<GlassPieceController>().InteractWithItem(); });
             glassPiece.GetComponent<EventTrigger>().triggers.Add(entry);
         }
     }

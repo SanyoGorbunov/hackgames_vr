@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: New Material
+  m_Name: MirrorPieceMaterial
   m_Shader: {fileID: 4800000, guid: c2d9a1c0cf0a2a1479d5da353265e0ef, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -62,6 +62,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _IsActive: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _QueueOffset: 0
