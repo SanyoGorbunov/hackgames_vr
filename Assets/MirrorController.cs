@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MirrorController : MonoBehaviour
 {
     public GameObject[] missingPieces;
     public Material missingMaterial;
     public Material correctMaterial;
+    public string nextSceneName;
 
     private int missingIndex;
 
@@ -26,10 +28,12 @@ public class MirrorController : MonoBehaviour
 
     public void FillMissingPiece()
     {
-        if (missingIndex < missingPieces.Length)
+        missingPieces[missingIndex].GetComponent<Renderer>().material = correctMaterial;
+        missingIndex++;
+
+        if (missingIndex == missingPieces.Length)
         {
-            missingPieces[missingIndex].GetComponent<Renderer>().material = correctMaterial;
-            missingIndex++;
+            SceneManager.LoadScene(nextSceneName);
         }
     }
 }
