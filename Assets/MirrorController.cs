@@ -12,6 +12,7 @@ public class MirrorController : MonoBehaviour
     public string nextSceneName;
 
     private int missingIndex;
+    private int missingNumber;
 
     // Start is called before the first frame update
     void Start()
@@ -46,12 +47,28 @@ public class MirrorController : MonoBehaviour
         }
     }
 
+    public void SetMissingNumber(int missingNumber)
+    {
+        foreach (Transform piece in transform)
+        {
+            piece.gameObject.GetComponent<Renderer>().material = correctMaterial;
+        }
+
+        for (int i = 0; i < missingNumber; i++)
+        {
+            missingPieces[i].GetComponent<Renderer>().material = missingMaterial;
+        }
+
+        missingIndex = 0;
+        this.missingNumber = missingNumber;
+    }
+
     public void FillMissingPiece()
     {
         missingPieces[missingIndex].GetComponent<Renderer>().material = correctMaterial;
         missingIndex++;
 
-        if (missingIndex == missingPieces.Length)
+        if (missingIndex == missingNumber)
         {
             Invoke("LoadNextScene", DelayBeforeNextScene);
         }

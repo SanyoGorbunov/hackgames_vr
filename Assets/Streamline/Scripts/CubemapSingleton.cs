@@ -13,7 +13,7 @@ namespace Assets.Streamline.Scripts
             _otherMaterials = Resources.LoadAll<Material>("Worlds/Other/");
 
             _levelTwoMaterial = Resources.Load<Material>("Worlds/LevelTwo");
-            //_levelThreeMaterial = Resources.Load<Material>("Streamline/Materials/Cubemaps/LevelThree");
+            _levelThreeMaterial = Resources.Load<Material>("Worlds/LevelThree");
             //_finalMaterial = Resources.Load<Material>("Streamline/Materials/Cubemaps/Final");
         }
 

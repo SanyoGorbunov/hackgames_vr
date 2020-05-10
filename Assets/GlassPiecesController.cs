@@ -35,6 +35,7 @@ public class GlassPiecesController : MonoBehaviour
             controller.onUninspection += () => { _currentGlassPiece = null; };
         }
 
+        mirror.SetMissingNumber(winningPieces);
         mirror.RegisterEventTrigger(this);
     }
 

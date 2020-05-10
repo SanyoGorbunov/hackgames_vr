@@ -379,9 +379,49 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6679767147292968840, guid: ced4eccd21208594bb940bec56560c55,
         type: 3}
+      propertyPath: missingPieces.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679767147292968840, guid: ced4eccd21208594bb940bec56560c55,
+        type: 3}
       propertyPath: nextSceneName
       value: LevelTwoScene
       objectReference: {fileID: 0}
+    - target: {fileID: 6679767147292968840, guid: ced4eccd21208594bb940bec56560c55,
+        type: 3}
+      propertyPath: missingPieces.Array.data[3]
+      value: 
+      objectReference: {fileID: 855223084}
+    - target: {fileID: 6679767147292968840, guid: ced4eccd21208594bb940bec56560c55,
+        type: 3}
+      propertyPath: missingPieces.Array.data[4]
+      value: 
+      objectReference: {fileID: 484440984}
+    - target: {fileID: 6679767147292968840, guid: ced4eccd21208594bb940bec56560c55,
+        type: 3}
+      propertyPath: missingPieces.Array.data[5]
+      value: 
+      objectReference: {fileID: 1370109256}
+    - target: {fileID: 6679767147292968840, guid: ced4eccd21208594bb940bec56560c55,
+        type: 3}
+      propertyPath: missingPieces.Array.data[6]
+      value: 
+      objectReference: {fileID: 355742886}
+    - target: {fileID: 6679767147292968840, guid: ced4eccd21208594bb940bec56560c55,
+        type: 3}
+      propertyPath: missingPieces.Array.data[7]
+      value: 
+      objectReference: {fileID: 1489985170}
+    - target: {fileID: 6679767147292968840, guid: ced4eccd21208594bb940bec56560c55,
+        type: 3}
+      propertyPath: missingPieces.Array.data[8]
+      value: 
+      objectReference: {fileID: 1440680357}
+    - target: {fileID: 6679767147292968840, guid: ced4eccd21208594bb940bec56560c55,
+        type: 3}
+      propertyPath: missingPieces.Array.data[9]
+      value: 
+      objectReference: {fileID: 666514}
     - target: {fileID: 6679767147776917419, guid: ced4eccd21208594bb940bec56560c55,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1662,4 +1702,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mirror: {fileID: 441510562}
-  winningPieces: 3
+  winningPieces: 5
