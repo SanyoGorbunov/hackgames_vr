@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class GlassPieceController : MonoBehaviour
 {
-    Transform PlayerCamera = null;
+    Transform PlayerCameraTransform = null;
     Transform PlayerTransform = null;
     public float offset = 1.0f;
+    public float z_offset = 0.2f;
 
     private Vector3 startPos;
     private Quaternion startRot;
@@ -15,16 +16,28 @@ public class GlassPieceController : MonoBehaviour
     bool beignInspected = false;
     private Material glassPieceMaterial;
 
+    private Transform parentTransform;
+    private Transform MirrorTransform;
+
+    private Vector2 VectorToMirror;  
+
     // Start is called before the first frame update
     void Start()
     {
-        PlayerCamera = GameObject.FindWithTag("MainCamera").transform;
+        PlayerCameraTransform = GameObject.FindWithTag("MainCamera").transform;
         PlayerTransform = GameObject.FindWithTag("Player").transform;
         startPos = transform.position;
         startRot = transform.rotation;
         List<Material> materials = new List<Material>();
         GetComponent<MeshRenderer>().GetMaterials(materials);
         glassPieceMaterial = materials[0];
+        parentTransform = transform.parent;
+        MirrorTransform = FindObjectOfType<MirrorController>().gameObject.transform;
+
+        Vector2 mirrorPos = new Vector2(MirrorTransform.position.x, MirrorTransform.position.z);
+        Vector2 PlayerPos = new Vector2(PlayerTransform.position.x, PlayerTransform.position.z);
+
+        VectorToMirror = mirrorPos - PlayerPos;
     }
 
     IEnumerator MoveToPosition(Vector3 newPosition, Quaternion newRotation, float time, bool makeVisible)
@@ -58,6 +71,16 @@ public class GlassPieceController : MonoBehaviour
         {
             glassPieceMaterial.SetFloat("_IsActive", 0.0f);
         }
+
+        if (!beignInspected)
+        {
+            transform.SetParent(PlayerCameraTransform);
+        }
+        else
+        {
+            transform.SetParent(parentTransform);
+        }
+
         changeInspected();
     }
 
@@ -86,8 +109,8 @@ public class GlassPieceController : MonoBehaviour
     public void InspectPiece()
     {
         //PlayerCamera = GameObject.FindWithTag("Player").transform;
-        Vector3 pos = PlayerCamera.position + PlayerTransform.forward * offset;
-        Quaternion finalRot = Quaternion.identity;
+        Vector3 pos = PlayerCameraTransform.position + PlayerCameraTransform.forward * offset;
+        Quaternion finalRot = PlayerCameraTransform.rotation;
         StartCoroutine(MoveToPosition(pos, finalRot, 0.4f,true));
     }
 
@@ -99,6 +122,24 @@ public class GlassPieceController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        glassPieceMaterial.SetVector("_ViewVector", transform.position-transform.forward);
+        glassPieceMaterial.SetVector("_RightVector", transform.right);
+
+        if (beignInspected && canInteract)
+        {
+                        
+            Vector2 PlayerForward = new Vector2(PlayerCameraTransform.forward.x, PlayerCameraTransform.forward.z);
+
+            float angle = Vector2.Angle(PlayerForward, VectorToMirror);
+            if (angle < 30.0f)
+            {
+                transform.position = PlayerCameraTransform.position + PlayerCameraTransform.forward * offset - PlayerCameraTransform.up * z_offset; ;
+                transform.rotation = PlayerCameraTransform.rotation;
+            }
+            else {
+                transform.position = PlayerCameraTransform.position + PlayerCameraTransform.forward * offset;
+                transform.rotation = PlayerCameraTransform.rotation;
+            }
+        }
     }
 }
