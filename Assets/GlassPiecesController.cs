@@ -27,9 +27,9 @@ public class GlassPiecesController : MonoBehaviour
 
             var controller = glassPiece.GetComponent<GlassPieceController>();
             controller.isWinning = winningPositions[i];
+            controller.RenderWinning();
             controller.onInspection += () => { _currentGlassPiece = controller; };
             controller.onUninspection += () => { _currentGlassPiece = null; };
-            controller.RenderWinning();
         }
 
         mirror.RegisterEventTrigger(this);

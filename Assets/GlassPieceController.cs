@@ -27,9 +27,7 @@ public class GlassPieceController : MonoBehaviour
         PlayerTransform = GameObject.FindWithTag("Player").transform;
         startPos = transform.position;
         startRot = transform.rotation;
-        List<Material> materials = new List<Material>();
-        GetComponent<MeshRenderer>().GetMaterials(materials);
-        glassPieceMaterial = materials[0];
+        EnsureMaterial();
     }
 
     IEnumerator MoveToPosition(Vector3 newPosition, Quaternion newRotation, float time, bool makeVisible)
@@ -111,14 +109,24 @@ public class GlassPieceController : MonoBehaviour
         }
     }
 
+    void EnsureMaterial()
+    {
+        if (glassPieceMaterial == null)
+        {
+            List<Material> materials = new List<Material>();
+            GetComponent<MeshRenderer>().GetMaterials(materials);
+            glassPieceMaterial = materials[0];
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void RenderWinning()
     {
+        EnsureMaterial();
         if (isWinning)
         {
             glassPieceMaterial.SetColor("_Color", Color.red);
