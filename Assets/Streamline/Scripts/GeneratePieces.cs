@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Streamline.Scripts;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GeneratePieces : MonoBehaviour
 {
@@ -6,25 +8,27 @@ public class GeneratePieces : MonoBehaviour
     public GameObject point;
     public GameObject prefab;
     public float radius;
-    public PlacementType placementType;
+
+    public MirrorController mirror;
+    public int winningPieces;
+
+    private GlassPieceController _currentGlassPiece;
+    private int[] otherPiecesNums;
 
     public void Start()
     {
-        switch (placementType)
-        {
-            case PlacementType.Surface:
-                InstantiateOnTable();
-                break;
-            case PlacementType.Flying:
-                break;
-            case PlacementType.FlyingAroundPlayer:
-                InstantiateCircle();
-                break;
-        }
+        otherPiecesNums = new int[CubemapSingleton.GetInstance().GetNumberOfOtherMaterials()];
+
+        InstantiateCircle();
+
+        mirror.SetMissingNumber(winningPieces);
+        mirror.RegisterEventTrigger(this);
     }
 
     void InstantiateCircle()
     {
+        var winningPositions = GetWinningPositions();
+
         float angle = 360f / (float)pieceCount;
         for (int i = 0; i < pieceCount; i++)
         {
@@ -32,56 +36,65 @@ public class GeneratePieces : MonoBehaviour
             Vector3 direction = rotation * Vector3.forward;
 
             Vector3 position = point.transform.position + (direction * radius);
-            Instantiate(prefab, position, rotation);
+            var pieceGameObject = Instantiate(prefab, position, rotation);
+            Transform glassPiece = pieceGameObject.transform;
+
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerClick;
+            entry.callback.AddListener((eventData) => {
+                glassPiece.gameObject.GetComponent<GlassPieceController>().InteractWithItem();
+            });
+            glassPiece.GetComponent<EventTrigger>().triggers.Add(entry);
+
+            var controller = glassPiece.GetComponent<GlassPieceController>();
+            controller.isWinning = winningPositions[i];
+            controller.ReplaceMaterial(Instantiate<Material>(GetMaterial(controller.isWinning)));
+            controller.onInspection += () => { _currentGlassPiece = controller; };
+            controller.onUninspection += () => { _currentGlassPiece = null; };
         }
     }
 
-    void InstantiateOnTable()
+    private bool[] GetWinningPositions()
     {
-        // get size of piece
-        var prefabRenderer = prefab.GetComponent<Renderer>();
-        // get size of table
-        var tableRenderer = point.GetComponent<Renderer>();
+        bool[] winningPositions = new bool[pieceCount];
 
-        float offset = 0.05f;
-        float tableX = tableRenderer.bounds.size.x,
-            tableZ = tableRenderer.bounds.size.z;
-        float pieceX = prefab.transform.localScale.x,
-            pieceZ = prefab.transform.localScale.y;
-
-        int pieceToRender = pieceCount;
-        int rows = 4;
-        int maxInRow = pieceCount / rows;
-
-        float cellX = (tableX - 2 * offset) / maxInRow,
-            cellZ = (tableZ - 2* offset) / rows;
-
-        for (int i = 0; i < rows; i++)
+        for (int i = 0; i < winningPieces; i++)
         {
-            for (int j = 0; j < (maxInRow < pieceToRender ? maxInRow : pieceToRender); j++)
+            int winningPosition = 0;
+            do
             {
-                var gameObject = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-
-                float xElem = j * cellX + cellX / 2,
-                    zElem = i * cellZ + cellZ / 2;
-
-                Vector3 position = new Vector3(
-                    tableRenderer.bounds.center.x - tableRenderer.bounds.extents.x + xElem + pieceX / 2f,
-                    tableRenderer.bounds.center.y + tableRenderer.bounds.extents.y + prefabRenderer.bounds.extents.y - pieceZ / 2f + offset,
-                    tableRenderer.bounds.center.z - tableRenderer.bounds.extents.z + zElem);
-
-                gameObject.transform.position = position;
-                gameObject.transform.Rotate(90, 90, Random.Range(0, 180));
-            }
-
-            pieceToRender -= maxInRow;
+                winningPosition = Random.Range(0, winningPositions.Length);
+            } while (winningPositions[winningPosition]);
+            winningPositions[winningPosition] = true;
         }
-    }
-}
 
-public enum PlacementType
-{
-    Surface,
-    Flying,
-    FlyingAroundPlayer
+        return winningPositions;
+    }
+
+    public bool IsCurrentPieceWinning()
+    {
+        if (_currentGlassPiece != null && _currentGlassPiece.isWinning)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public Material GetMaterial(bool isWinning)
+    {
+        if (isWinning)
+        {
+            return CubemapSingleton.GetInstance().GetByNextScene(mirror.nextSceneName);
+        }
+
+        int materialId;
+        do
+        {
+            materialId = Random.Range(0, otherPiecesNums.Length);
+        } while (otherPiecesNums[materialId] + 1 == winningPieces);
+
+        otherPiecesNums[materialId]++;
+        return CubemapSingleton.GetInstance().GetAnotherMaterialById(materialId);
+    }
 }

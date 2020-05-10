@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GlassPieceController : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class GlassPieceController : MonoBehaviour
     bool beignInspected = false;
     private Material glassPieceMaterial;
 
+    public bool isWinning;
+    public UnityAction onInspection;
+    public UnityAction onUninspection;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,9 +27,7 @@ public class GlassPieceController : MonoBehaviour
         PlayerTransform = GameObject.FindWithTag("Player").transform;
         startPos = transform.position;
         startRot = transform.rotation;
-        List<Material> materials = new List<Material>();
-        GetComponent<MeshRenderer>().GetMaterials(materials);
-        glassPieceMaterial = materials[0];
+        EnsureMaterial();
     }
 
     IEnumerator MoveToPosition(Vector3 newPosition, Quaternion newRotation, float time, bool makeVisible)
@@ -89,16 +92,53 @@ public class GlassPieceController : MonoBehaviour
         Vector3 pos = PlayerCamera.position + PlayerTransform.forward * offset;
         Quaternion finalRot = Quaternion.identity;
         StartCoroutine(MoveToPosition(pos, finalRot, 0.4f,true));
+
+        if (onInspection != null)
+        {
+            onInspection.Invoke();
+        }
     }
 
     public void UninspectPiece()
     {
         StartCoroutine(MoveToPosition(startPos, startRot, 0.4f, false));
+
+        if (onUninspection != null)
+        {
+            onUninspection.Invoke();
+        }
+    }
+
+    void EnsureMaterial(Material materialToOverride = null)
+    {
+        if (glassPieceMaterial == null)
+        {
+            List<Material> materials = new List<Material>();
+            GetComponent<MeshRenderer>().GetMaterials(materials);
+            glassPieceMaterial = materials[0];
+            glassPieceMaterial.SetFloat("_IsActive", 0.0f);
+        }
+
+        if (materialToOverride != null)
+        {
+            GetComponent<MeshRenderer>().material = materialToOverride;
+            glassPieceMaterial = materialToOverride;
+            glassPieceMaterial.SetFloat("_IsActive", 0.0f);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+    }
+
+    public void ReplaceMaterial(Material material)
+    {
+        EnsureMaterial(material);
+
+        if (isWinning)
+        {
+            glassPieceMaterial.SetColor("_Color", Color.red);
+        }
     }
 }
