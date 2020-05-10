@@ -1,4 +1,5 @@
 ﻿
+using Assets.Streamline.Scripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,10 +9,12 @@ public class GlassPiecesController : MonoBehaviour
     public int winningPieces;
 
     private GlassPieceController _currentGlassPiece;
+    private int[] otherPiecesNums;
 
     // Start is called before the first frame update
     void Start()
     {
+        otherPiecesNums = new int[CubemapSingleton.GetInstance().GetNumberOfOtherMaterials()];
         var winningPositions = GetWinningPositions();
 
         for (int i = 0; i < transform.childCount; i++)
@@ -27,7 +30,7 @@ public class GlassPiecesController : MonoBehaviour
 
             var controller = glassPiece.GetComponent<GlassPieceController>();
             controller.isWinning = winningPositions[i];
-            controller.RenderWinning();
+            controller.ReplaceMaterial(Instantiate<Material>(GetMaterial(controller.isWinning)));
             controller.onInspection += () => { _currentGlassPiece = controller; };
             controller.onUninspection += () => { _currentGlassPiece = null; };
         }
@@ -60,6 +63,23 @@ public class GlassPiecesController : MonoBehaviour
         }
 
         return false;
+    }
+
+    public Material GetMaterial(bool isWinning)
+    {
+        if (isWinning)
+        {
+            return CubemapSingleton.GetInstance().GetByNextScene(mirror.nextSceneName);
+        }
+
+        int materialId;
+        do
+        {
+            materialId = Random.Range(0, otherPiecesNums.Length);
+        } while (otherPiecesNums[materialId] + 1 == winningPieces);
+
+        otherPiecesNums[materialId]++;
+        return CubemapSingleton.GetInstance().GetAnotherMaterialById(materialId);
     }
 
     // Update is called once per frame

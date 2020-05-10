@@ -109,13 +109,21 @@ public class GlassPieceController : MonoBehaviour
         }
     }
 
-    void EnsureMaterial()
+    void EnsureMaterial(Material materialToOverride = null)
     {
         if (glassPieceMaterial == null)
         {
             List<Material> materials = new List<Material>();
             GetComponent<MeshRenderer>().GetMaterials(materials);
             glassPieceMaterial = materials[0];
+            glassPieceMaterial.SetFloat("_IsActive", 0.0f);
+        }
+
+        if (materialToOverride != null)
+        {
+            GetComponent<MeshRenderer>().material = materialToOverride;
+            glassPieceMaterial = materialToOverride;
+            glassPieceMaterial.SetFloat("_IsActive", 0.0f);
         }
     }
 
@@ -124,9 +132,10 @@ public class GlassPieceController : MonoBehaviour
     {
     }
 
-    public void RenderWinning()
+    public void ReplaceMaterial(Material material)
     {
-        EnsureMaterial();
+        EnsureMaterial(material);
+
         if (isWinning)
         {
             glassPieceMaterial.SetColor("_Color", Color.red);
