@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Cube:
-        m_Texture: {fileID: 8900000, guid: 4f860b41769d15e47b137d986c064a20, type: 2}
+        m_Texture: {fileID: 8900000, guid: d3271bf80853627459b71fd54e02bc9e, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
