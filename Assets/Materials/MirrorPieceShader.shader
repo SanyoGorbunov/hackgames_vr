@@ -2,8 +2,11 @@
 {
 	Properties{
 		_IsActive("Active", Float) = 0.5
-	   _Cube("World Map", Cube) = "" {}
+		_CubeLeft("Left Eye Map", Cube) = "" {}
+		_CubeRight("Right Eye Map", Cube) = "" {}
 		_Color("Inactive Color", Color) = (1,1,1,1)
+		_ViewVector("View Vector",Vector ) = (1,1,1)
+		_RightVector("Right Vector",Vector) = (1,1,1)
 	}
 		SubShader{
 		   Pass {
@@ -15,9 +18,12 @@
 			  #include "UnityCG.cginc"
 
 			  // User-specified uniforms
-			  uniform samplerCUBE _Cube;
+			  uniform samplerCUBE _CubeLeft;
+				uniform samplerCUBE _CubeRight;
 				fixed4 _Color;
 				float _IsActive;
+				float3 _ViewVector;
+				float3 _RightVector;
 
 			  struct vertexInput {
 				 float4 vertex : POSITION;
@@ -35,9 +41,26 @@
 
 				 float4x4 modelMatrix = unity_ObjectToWorld;
 				 float4x4 modelMatrixInverse = unity_WorldToObject;
+				 float3 right = UNITY_MATRIX_V[0].xyz;
+				 float3 camPos = _WorldSpaceCameraPos;
+
+				 //output.viewDir = _ViewVector;//mul(modelMatrix, input.vertex).xyz
+					//- (camPos);
+
+				 float3 rightOffset = float3(1,1,1);
+
+				 if(unity_StereoEyeIndex == 0)
+				  {
+					  rightOffset = _RightVector*0.008;
+				 
+				  }
+				  else
+				  {
+					 rightOffset = -_RightVector * 0.008;
+				 }
 
 				 output.viewDir = mul(modelMatrix, input.vertex).xyz
-					- _WorldSpaceCameraPos;
+					- (_ViewVector+ rightOffset);
 				 output.normalDir = normalize(
 					mul(float4(input.normal, 0.0), modelMatrixInverse).xyz);
 				 output.pos = UnityObjectToClipPos(input.vertex);
@@ -46,7 +69,18 @@
 
 			  float4 frag(vertexOutput input) : COLOR
 			  {
-				 float4 cube = texCUBE(_Cube, input.viewDir);
+				  float4 cube;
+				  //if(unity_StereoEyeIndex == 0)
+				  //{
+					  //float3 right = UNITY_MATRIX_V[0].xyz;
+					  cube = texCUBE(_CubeLeft, input.viewDir);
+				 // }
+				  //else
+				  //{
+					  //float3 right = UNITY_MATRIX_V[0].xyz;
+					  cube = texCUBE(_CubeLeft, input.viewDir);
+				  //}
+				  
 
 				 float4 result = cube*_IsActive + _Color * (1 - _IsActive);
 				 //float3 reflecteмdDir =
