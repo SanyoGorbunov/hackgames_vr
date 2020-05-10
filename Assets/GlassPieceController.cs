@@ -26,6 +26,8 @@ public class GlassPieceController : MonoBehaviour
     public UnityAction onInspection;
     public UnityAction onUninspection;
 
+    public static GlassPieceController ActiveGlassPiece = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -90,6 +92,14 @@ public class GlassPieceController : MonoBehaviour
     void changeInspected()
     {
         beignInspected = !beignInspected;
+        if (beignInspected)
+        {
+            ActiveGlassPiece = this;
+        }
+        else
+        {
+            ActiveGlassPiece = null;
+        }
         canInteract = true;
     }
 
@@ -164,14 +174,38 @@ public class GlassPieceController : MonoBehaviour
             float angle = Vector2.Angle(PlayerForward, VectorToMirror);
             if (angle < 30.0f)
             {
-                transform.position = PlayerCameraTransform.position + PlayerCameraTransform.forward * offset - PlayerCameraTransform.up * z_offset; ;
+                transform.position = Vector3.Lerp(transform.position,PlayerCameraTransform.position + PlayerCameraTransform.forward * offset - PlayerCameraTransform.up * z_offset, 0.2f); ;
                 transform.rotation = PlayerCameraTransform.rotation;
             }
             else {
-                transform.position = PlayerCameraTransform.position + PlayerCameraTransform.forward * offset;
+                transform.position = Vector3.Lerp(transform.position, PlayerCameraTransform.position + PlayerCameraTransform.forward * offset,0.2f);
                 transform.rotation = PlayerCameraTransform.rotation;
             }
         }
+    }
+
+    public void MoveToDestroy(Transform mirror)
+    {
+        StartCoroutine(MoveToPositionToDestroy(mirror.position, mirror.rotation, 0.3f));
+    }
+
+    IEnumerator MoveToPositionToDestroy(Vector3 newPosition, Quaternion newRotation, float time)
+    {
+        canInteract = false;
+        float elapsedTime = 0;
+        Vector3 startingPos = transform.position;
+        Quaternion startingRot = transform.rotation;
+        while (elapsedTime < time)
+        {
+            transform.position = Vector3.Lerp(startingPos, newPosition, (elapsedTime / time));
+            //transform.rotation = Quaternion.Lerp(startingRot, newRotation, (elapsedTime / time));
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        beignInspected = false;
+        ActiveGlassPiece = null;
+        Destroy(this.gameObject);
     }
 
     public void ReplaceMaterial(Material material)

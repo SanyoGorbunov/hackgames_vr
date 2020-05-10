@@ -37,6 +37,7 @@ public class MirrorController : MonoBehaviour
         entry.callback.AddListener((eventData) => {
             if (glassPiecesController.IsCurrentPieceWinning())
             {
+                GlassPieceController.ActiveGlassPiece.MoveToDestroy(this.transform);
                 FillMissingPiece();
             }
         });
@@ -54,6 +55,7 @@ public class MirrorController : MonoBehaviour
         entry.callback.AddListener((eventData) => {
             if (generatePiecesController.IsCurrentPieceWinning())
             {
+                GlassPieceController.ActiveGlassPiece.MoveToDestroy(this.transform);
                 FillMissingPiece();
             }
         });
