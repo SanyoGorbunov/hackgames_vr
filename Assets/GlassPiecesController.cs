@@ -30,7 +30,7 @@ public class GlassPiecesController : MonoBehaviour
 
             var controller = glassPiece.GetComponent<GlassPieceController>();
             controller.isWinning = winningPositions[i];
-            controller.ReplaceMaterial(Instantiate<Material>(GetMaterial(controller.isWinning)));
+            controller.ReplaceMaterial(Instantiate<Material>(GetMaterial(winningPositions[i])));
             controller.onInspection += () => { _currentGlassPiece = controller; };
             controller.onUninspection += () => { _currentGlassPiece = null; };
         }

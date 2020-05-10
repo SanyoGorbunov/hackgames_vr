@@ -139,6 +139,9 @@ public class GlassPieceController : MonoBehaviour
         if (isWinning)
         {
             glassPieceMaterial.SetColor("_Color", Color.red);
+        } else
+        {
+            glassPieceMaterial.SetColor("_Color", Color.white);
         }
     }
 }
