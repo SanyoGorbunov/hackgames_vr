@@ -14,7 +14,7 @@ namespace Assets.Streamline.Scripts
 
             _levelTwoMaterial = Resources.Load<Material>("Worlds/LevelTwo");
             _levelThreeMaterial = Resources.Load<Material>("Worlds/LevelThree");
-            //_finalMaterial = Resources.Load<Material>("Streamline/Materials/Cubemaps/Final");
+            _finalMaterial = Resources.Load<Material>("Worlds/Final");
         }
 
         private static CubemapSingleton _cubemapSingleton;

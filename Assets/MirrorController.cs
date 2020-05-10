@@ -47,6 +47,23 @@ public class MirrorController : MonoBehaviour
         }
     }
 
+    public void RegisterEventTrigger(GeneratePieces generatePiecesController)
+    {
+        EventTrigger.Entry entry = new EventTrigger.Entry();
+        entry.eventID = EventTriggerType.PointerClick;
+        entry.callback.AddListener((eventData) => {
+            if (generatePiecesController.IsCurrentPieceWinning())
+            {
+                FillMissingPiece();
+            }
+        });
+
+        foreach (Transform piece in transform)
+        {
+            piece.gameObject.GetComponent<EventTrigger>().triggers.Add(entry);
+        }
+    }
+
     public void SetMissingNumber(int missingNumber)
     {
         foreach (Transform piece in transform)
