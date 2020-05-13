@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour {
+public class CharacterController1 : MonoBehaviour {
 
     public float speed = 10.0f;
     public float sprintSpeed = 1000f;

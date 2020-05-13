@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class MirrorController : MonoBehaviour
 {
-    private const float DelayBeforeNextScene = 5.0f;
+    private const float DelayBeforeNextScene = 3.0f;
 
     public GameObject[] missingPieces;
     public Material missingMaterial;

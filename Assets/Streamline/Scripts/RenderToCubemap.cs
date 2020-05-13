@@ -2,8 +2,8 @@
 using UnityEditor;
 using System.Collections;
 
-public class RenderCubemapWizard : ScriptableWizard
-{
+public class RenderCubemapWizard// : ScriptableWizard
+{/*
     public Transform renderFromPosition;
     public Cubemap cubemap;
 
@@ -33,5 +33,5 @@ public class RenderCubemapWizard : ScriptableWizard
     {
         ScriptableWizard.DisplayWizard<RenderCubemapWizard>(
             "Render cubemap", "Render!");
-    }
+    }*/
 }
