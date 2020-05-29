@@ -156,7 +156,7 @@ public class OVRGazePointer : OVRCursor {
 
         _instance = this;
 
-		gazeIcon = transform.Find("GazeIcon");
+		gazeIcon = GameObject.Find("Cursor").transform;
         progressIndicator = transform.GetComponent<OVRProgressIndicator>();
     }
     

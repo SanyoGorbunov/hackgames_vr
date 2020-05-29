@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Streamline/Scenes/LevelOneScene.unity
     guid: 958eb9eb3d3ed314eb7246c752108f20
-  - enabled: 0
+  - enabled: 1
     path: Assets/Streamline/Scenes/LevelTwoScene.unity
     guid: 6493e98a59b679e43bb4417b288135cf
   - enabled: 0

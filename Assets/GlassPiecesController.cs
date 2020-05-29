@@ -21,13 +21,13 @@ public class GlassPiecesController : MonoBehaviour
         {
             Transform glassPiece = transform.GetChild(i);
 
-            EventTrigger.Entry entry = new EventTrigger.Entry();
+            /*EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = EventTriggerType.PointerClick;
             entry.callback.AddListener((eventData) => {
                 glassPiece.gameObject.GetComponent<GlassPieceController>().InteractWithItem();
             });
             glassPiece.GetComponent<EventTrigger>().triggers.Add(entry);
-
+            */
             var controller = glassPiece.GetComponent<GlassPieceController>();
             controller.isWinning = winningPositions[i];
             //controller.ReplaceMaterial(Instantiate<Material>(GetMaterial(winningPositions[i])));
